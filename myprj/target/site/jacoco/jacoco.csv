@@ -1,0 +1,17 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+myprj,com.game.asciiPanel,AsciiCharacterData,3,0,0,0,1,0,1,0,1,0
+myprj,com.game.asciiPanel,AsciiPanel,2459,0,238,0,319,0,164,0,45,0
+myprj,com.game.asciiPanel,AsciiFont,85,0,0,0,17,0,5,0,5,0
+myprj,com.game.com.anish.calabashbros,World,64,0,6,0,11,0,6,0,3,0
+myprj,com.game.com.anish.calabashbros,Creature,13,0,0,0,4,0,2,0,2,0
+myprj,com.game.com.anish.calabashbros,Calabash,178,0,26,0,36,0,17,0,4,0
+myprj,com.game.com.anish.calabashbros,Dfs,378,0,42,0,55,0,26,0,5,0
+myprj,com.game.com.anish.calabashbros,Shallow,7,0,0,0,2,0,1,0,1,0
+myprj,com.game.com.anish.calabashbros,Thing,30,0,0,0,11,0,6,0,6,0
+myprj,com.game.com.anish.calabashbros,Wall,6,0,0,0,2,0,1,0,1,0
+myprj,com.game.com.anish.calabashbros,Floor,6,0,0,0,2,0,1,0,1,0
+myprj,com.game.com.anish.calabashbros,Tile,43,0,0,0,18,0,8,0,8,0
+myprj,com.game.com.anish.screen,WorldScreen,156,0,16,0,33,0,13,0,3,0
+myprj,com.game.com.anish.maze,MazeGenerator,288,0,52,0,39,0,35,0,9,0
+myprj,com.game.com.anish.maze,Node,9,0,0,0,4,0,1,0,1,0
+myprj,com.game,Main,62,0,0,0,21,0,6,0,6,0

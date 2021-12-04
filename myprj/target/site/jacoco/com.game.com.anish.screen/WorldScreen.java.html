@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WorldScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myprj</a> &gt; <a href="index.source.html" class="el_package">com.game.com.anish.screen</a> &gt; <span class="el_source">WorldScreen.java</span></div><h1>WorldScreen.java</h1><pre class="source lang-java linenums">package com.game.com.anish.screen;
+
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+
+import com.game.com.anish.calabashbros.Calabash;
+import com.game.com.anish.calabashbros.World;
+import com.game.com.anish.calabashbros.Wall;
+import com.game.com.anish.calabashbros.Floor;
+
+import com.game.asciiPanel.AsciiPanel;
+
+import com.game.com.anish.maze.MazeGenerator;
+
+public class WorldScreen implements Screen {
+
+    private World world;
+    private Calabash player;
+    String[] sortSteps;
+    int[][] maze;
+
+<span class="nc" id="L22">    public WorldScreen() {</span>
+<span class="nc" id="L23">        int dimension = 30;</span>
+<span class="nc" id="L24">        world = new World();</span>
+<span class="nc" id="L25">        MazeGenerator mazeGenerator = new MazeGenerator(dimension);</span>
+<span class="nc" id="L26">        mazeGenerator.generateMaze();</span>
+<span class="nc" id="L27">        maze = mazeGenerator.getMaze();</span>
+
+<span class="nc" id="L29">        player = new Calabash(world, maze);</span>
+        // bros = new Calabash[7];
+
+        // bros[3] = new Calabash(new Color(204, 0, 0), 1, world);
+        // bros[5] = new Calabash(new Color(255, 165, 0), 2, world);
+        // bros[1] = new Calabash(new Color(252, 233, 79), 3, world);
+        // bros[0] = new Calabash(new Color(78, 154, 6), 4, world);
+        // bros[4] = new Calabash(new Color(50, 175, 255), 5, world);
+        // bros[6] = new Calabash(new Color(114, 159, 207), 6, world);
+        // bros[2] = new Calabash(new Color(173, 127, 168), 7, world);
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        for (int i = 0; i &lt; dimension; ++i) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            for (int j = 0; j &lt; dimension; ++j) {</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">                if (maze[i][j] == 0) {</span>
+<span class="nc" id="L42">                    Wall wall = new Wall(world);</span>
+<span class="nc" id="L43">                    world.put(wall, i, j);</span>
+<span class="nc" id="L44">                } else {</span>
+<span class="nc" id="L45">                    Floor floor = new Floor(world);</span>
+<span class="nc" id="L46">                    world.put(floor, i, j);</span>
+                }
+            }
+        }
+<span class="nc" id="L50">        world.put(player, 0, 0);</span>
+        // world.put(bros[0], 10, 10);
+        // world.put(bros[1], 12, 10);
+        // world.put(bros[2], 14, 10);
+        // world.put(bros[3], 16, 10);
+        // world.put(bros[4], 18, 10);
+        // world.put(bros[5], 20, 10);
+        // world.put(bros[6], 22, 10);
+
+        // BubbleSorter&lt;Calabash&gt; b = new BubbleSorter&lt;&gt;();
+        // b.load(bros);
+        // b.sort();
+
+        // sortSteps = this.parsePlan(b.getPlan());
+<span class="nc" id="L64">    }</span>
+
+    // private String[] parsePlan(String plan) {
+    // return plan.split(&quot;\n&quot;);
+    // }
+
+    // private void execute(Calabash[] bros, String step) {
+    // String[] couple = step.split(&quot;&lt;-&gt;&quot;);
+    // getBroByRank(bros, Integer.parseInt(couple[0])).swap(getBroByRank(bros,
+    // Integer.parseInt(couple[1])));
+    // }
+
+    // private Calabash getBroByRank(Calabash[] bros, int rank) {
+    // for (Calabash bro : bros) {
+    // if (bro.getRank() == rank) {
+    // return bro;
+    // }
+    // }
+    // return null;
+    // }
+
+    @Override
+    public void displayOutput(AsciiPanel terminal) {
+
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        for (int x = 0; x &lt; World.WIDTH; x++) {</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            for (int y = 0; y &lt; World.HEIGHT; y++) {</span>
+
+<span class="nc" id="L91">                terminal.write(world.get(x, y).getGlyph(), x, y, world.get(x, y).getColor());</span>
+
+            }
+        }
+<span class="nc" id="L95">    }</span>
+
+<span class="nc" id="L97">    int i = 0;</span>
+
+    @Override
+    public Screen respondToUserInput(KeyEvent key) {
+
+<span class="nc bnc" id="L102" title="All 6 branches missed.">        switch (key.getKeyCode()) {</span>
+            case KeyEvent.VK_LEFT:
+<span class="nc" id="L104">                player.manualmove(world, 27);</span>
+<span class="nc" id="L105">                break;</span>
+            case KeyEvent.VK_RIGHT:
+<span class="nc" id="L107">                player.manualmove(world, 26);</span>
+<span class="nc" id="L108">                break;</span>
+            case KeyEvent.VK_UP:
+<span class="nc" id="L110">                player.manualmove(world, 24);</span>
+<span class="nc" id="L111">                break;</span>
+            case KeyEvent.VK_DOWN:
+<span class="nc" id="L113">                player.manualmove(world, 25);</span>
+<span class="nc" id="L114">                break;</span>
+            case KeyEvent.VK_ENTER:
+<span class="nc" id="L116">                player.automove(world);</span>
+                break;
+        }
+<span class="nc" id="L119">        return this;</span>
+
+        // if (i &lt; this.sortSteps.length) {
+        // this.execute(bros, sortSteps[i]);
+        // i++;
+        // }
+
+        // return this;
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Dfs.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myprj</a> &gt; <a href="index.source.html" class="el_package">com.game.com.anish.calabashbros</a> &gt; <span class="el_source">Dfs.java</span></div><h1>Dfs.java</h1><pre class="source lang-java linenums">package com.game.com.anish.calabashbros;
+
+import java.util.ArrayList;
+import java.util.Stack;
+import com.game.com.anish.maze.Node;
+
+public class Dfs {
+    int[][] maze;
+    int[][] mat;
+    int x, y;
+    ArrayList&lt;Integer&gt; plan;
+
+<span class="nc" id="L13">    Dfs(int[][] maze) {</span>
+<span class="nc" id="L14">        this.maze = new int[maze.length][maze[0].length];</span>
+<span class="nc" id="L15">        mat = new int[maze.length][maze[0].length];</span>
+<span class="nc bnc" id="L16" title="All 2 branches missed.">        for (int i = 0; i &lt; maze.length; ++i)</span>
+<span class="nc bnc" id="L17" title="All 2 branches missed.">            for (int j = 0; j &lt; maze[0].length; ++j)</span>
+<span class="nc" id="L18">                this.maze[i][j] = maze[i][j];</span>
+<span class="nc" id="L19">        plan = new ArrayList&lt;Integer&gt;();</span>
+<span class="nc" id="L20">    }</span>
+
+    public void makePlan() {
+<span class="nc bnc" id="L23" title="All 4 branches missed.">        if (x == maze.length - 1 &amp;&amp; y == maze[0].length - 1)</span>
+<span class="nc" id="L24">            return;</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        for (int i = 0; i &lt; maze.length; ++i)</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">            for (int j = 0; j &lt; maze[0].length; ++j)</span>
+<span class="nc" id="L27">                mat[i][j] = maze[i][j];</span>
+<span class="nc" id="L28">        Stack&lt;Node&gt; s = new Stack&lt;&gt;();</span>
+<span class="nc" id="L29">        s.push(new Node(x, y));</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        while (mat[mat.length - 1][mat[0].length - 1] == 1) {</span>
+<span class="nc" id="L31">            Node cur = s.peek();</span>
+<span class="nc" id="L32">            x = cur.x;</span>
+<span class="nc" id="L33">            y = cur.y;</span>
+<span class="nc" id="L34">            int pos = 0;</span>
+<span class="nc bnc" id="L35" title="All 4 branches missed.">            if (x + 1 &lt; mat.length &amp;&amp; mat[x + 1][y] == 1) {</span>
+<span class="nc" id="L36">                ++x;</span>
+<span class="nc" id="L37">                pos = 26;</span>
+<span class="nc bnc" id="L38" title="All 4 branches missed.">            } else if (y + 1 &lt; mat[0].length &amp;&amp; mat[x][y + 1] == 1) {</span>
+<span class="nc" id="L39">                ++y;</span>
+<span class="nc" id="L40">                pos = 25;</span>
+<span class="nc bnc" id="L41" title="All 4 branches missed.">            } else if (x - 1 &gt;= 0 &amp;&amp; mat[x - 1][y] == 1) {</span>
+<span class="nc" id="L42">                --x;</span>
+<span class="nc" id="L43">                pos = 27;</span>
+<span class="nc bnc" id="L44" title="All 4 branches missed.">            } else if (y - 1 &gt;= 0 &amp;&amp; mat[x][y - 1] == 1) {</span>
+<span class="nc" id="L45">                --y;</span>
+<span class="nc" id="L46">                pos = 24;</span>
+            }
+<span class="nc bnc" id="L48" title="All 4 branches missed.">            if (x == cur.x &amp;&amp; y == cur.y) {</span>
+<span class="nc" id="L49">                Node temp1 = s.pop();</span>
+<span class="nc" id="L50">                Node temp2 = s.peek();</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                if (temp2.x - temp1.x == 1)</span>
+<span class="nc" id="L52">                    plan.add(26);</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                else if (temp2.x - temp1.x == -1)</span>
+<span class="nc" id="L54">                    plan.add(27);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                else if (temp2.y - temp1.y == 1)</span>
+<span class="nc" id="L56">                    plan.add(25);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                else if (temp2.y - temp1.y == -1)</span>
+<span class="nc" id="L58">                    plan.add(24);</span>
+<span class="nc" id="L59">            } else {</span>
+<span class="nc" id="L60">                s.push(new Node(x, y));</span>
+<span class="nc" id="L61">                mat[x][y] = 2;</span>
+<span class="nc" id="L62">                plan.add(pos);</span>
+            }
+<span class="nc" id="L64">        }</span>
+<span class="nc" id="L65">    }</span>
+
+    public void set(int x, int y) {
+<span class="nc" id="L68">        this.x = x;</span>
+<span class="nc" id="L69">        this.y = y;</span>
+<span class="nc" id="L70">    }</span>
+
+    public void clearPlan() {
+<span class="nc" id="L73">        plan.clear();</span>
+<span class="nc" id="L74">    }</span>
+
+    public ArrayList&lt;Integer&gt; getPlan() {
+<span class="nc" id="L77">        return plan;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
