@@ -1,9 +1,13 @@
 package com.game.com.anish.creatures;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class World {
 
     public static final int WIDTH = 30;
-    public static final int HEIGHT = 31;
+    public static final int HEIGHT = 32;
+    Lock lock = new ReentrantLock();
 
     private Tile<Thing>[][] tiles;
 

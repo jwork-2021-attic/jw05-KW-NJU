@@ -83,6 +83,23 @@ public class Bfs {
         }
     }
 
+    public ArrayList<Node> getrange(int[][] maze, int curx, int cury, int radius) {
+        setmaze(maze);
+        ArrayList<Node> cur;
+        cur = new ArrayList<Node>();
+        cur.add(new Node(curx, cury));
+        this.maze[curx][cury] = -1;
+        int depth = -1, i = 0;
+        for (; i < cur.size(); ++i) {
+            int x = cur.get(i).x, y = cur.get(i).y;
+            depth = this.maze[x][y] - 1;
+            if (depth + radius > -2)
+                explode(cur, x, y, depth);
+        }
+
+        return cur;
+    }
+
     private int randomwalk(int x, int y) {
         ArrayList<Integer> able = new ArrayList<Integer>();
         if (x > 0 && maze[x - 1][y] == -2)
@@ -93,7 +110,9 @@ public class Bfs {
             able.add(24);
         if (y < maze[0].length - 1 && maze[x][y + 1] == -2)
             able.add(25);
-        return able.get(rand.nextInt(able.size()));
+        if (able.size() > 0)
+            return able.get(rand.nextInt(able.size()));
+        return 24;
     }
 
     private void next(ArrayList<Node> nxt, int x, int y, int depth) {
@@ -112,6 +131,49 @@ public class Bfs {
         if (y < maze[0].length - 1 && maze[x][y + 1] == 1) {
             maze[x][y + 1] = depth;
             nxt.add(new Node(x, y + 1));
+        }
+    }
+
+    private void explode(ArrayList<Node> cur, int x, int y, int depth) {
+        if (maze[x][y] == 1000)
+            return;
+        if (x > 0 && ((maze[x - 1][y] >= 0 && maze[x - 1][y] <= 3) || (maze[x - 1][y] >= 5 && maze[x - 1][y] <= 7))) {
+            if (maze[x - 1][y] == 0)
+                maze[x - 1][y] = 1000;
+            else if (maze[x - 1][y] == 3)
+                maze[x - 1][y] = -1;
+            else
+                maze[x - 1][y] = depth;
+            cur.add(new Node(x - 1, y));
+        }
+        if (x < maze.length - 1
+                && ((maze[x + 1][y] >= 0 && maze[x + 1][y] <= 3) || (maze[x + 1][y] >= 5 && maze[x + 1][y] <= 7))) {
+            if (maze[x + 1][y] == 0)
+                maze[x + 1][y] = 1000;
+            else if (maze[x + 1][y] == 3)
+                maze[x + 1][y] = -1;
+            else
+                maze[x + 1][y] = depth;
+            cur.add(new Node(x + 1, y));
+        }
+        if (y > 0 && ((maze[x][y - 1] >= 0 && maze[x][y - 1] <= 3) || (maze[x][y - 1] >= 5 && maze[x][y - 1] <= 7))) {
+            if (maze[x][y - 1] == 0)
+                maze[x][y - 1] = 1000;
+            else if (maze[x][y - 1] == 3)
+                maze[x][y - 1] = -1;
+            else
+                maze[x][y - 1] = depth;
+            cur.add(new Node(x, y - 1));
+        }
+        if (y < maze[0].length - 1
+                && ((maze[x][y + 1] >= 0 && maze[x][y + 1] <= 3) || (maze[x][y + 1] >= 5 && maze[x][y + 1] <= 7))) {
+            if (maze[x][y + 1] == 0)
+                maze[x][y + 1] = 1000;
+            else if (maze[x][y + 1] == 3)
+                maze[x][y + 1] = -1;
+            else
+                maze[x][y + 1] = depth;
+            cur.add(new Node(x, y + 1));
         }
     }
 

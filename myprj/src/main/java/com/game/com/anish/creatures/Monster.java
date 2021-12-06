@@ -4,20 +4,19 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class Monster extends Creature implements Runnable {
 
-    Lock lock = new ReentrantLock();
-    Random rand = new Random();
+    Random rand;
 
     Calabash player;
     Bfs bfs;
+    static int maxcnt;
     static int cnt;
 
     public Monster(World world, Calabash player, int[][] maze) {
         super(Color.RED, (char) 1, world);
+        rand = new Random();
         this.maze = maze;
         this.player = player;
         this.hp = 20;
@@ -26,46 +25,42 @@ public class Monster extends Creature implements Runnable {
     }
 
     public void run() {
-        try {
-            lock.lock();
-            ArrayList<Integer> plan = new ArrayList<Integer>();
-            while (is_alive() && player.is_alive()) {
-                int x = player.getX(), y = player.getY();
-                if (bfs.has_changed(x, y) || plan.isEmpty()) {
-                    // System.out.println(bfs.has_changed(x, y));
-                    bfs.makePlan(maze, x, y, this.getX(), this.getY());
-                    plan = bfs.getPlan();
-                    // for (int i = 0; i < plan.size(); ++i)
-                    // System.out.print(plan.get(i) + " ");
-                }
-                if (!plan.isEmpty()) {
-                    move(world, plan.get(0));
-                    plan.remove(0);
-                }
-                // System.out.println(plan.isEmpty());
-                // System.out.println(bfs.is_close(x, y, this.getX(), this.getY()));
-                // System.out.println("(x,y): (" + x + ", " + y + "), (getx,gety): " +
-                // this.getX() + ", " + this.getY());
-                // for (int i = 0; i < plan.size(); ++i)
-                // System.out.print(plan.get(i) + " ");
-                // System.out.println();
+        ArrayList<Integer> plan = new ArrayList<Integer>();
+        while (is_alive() && player.is_alive()) {
+            int x = player.getX(), y = player.getY();
+            if (bfs.has_changed(x, y) || plan.isEmpty()) {
                 try {
-                    TimeUnit.MILLISECONDS.sleep(300);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    world.lock.lock();
+                    bfs.makePlan(maze, x, y, this.getX(), this.getY());
+                } finally {
+                    world.lock.unlock();
+                    plan = bfs.getPlan();
                 }
-                if (bfs.is_close(player.getX(), player.getY(), this.getX(), this.getY()))
-                    attack(player);
-                gethurt();
+
             }
-            if (player.is_alive()) {
-                world.put(new Floor(world), this.getX(), this.getY());
-                maze[this.getX()][this.getY()] = 1;
+            if (!plan.isEmpty()) {
+                move(world, plan.get(0));
+                plan.remove(0);
+            }
+            try {
+                TimeUnit.MILLISECONDS.sleep(300);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (bfs.is_close(player.getX(), player.getY(), this.getX(), this.getY()))
+                attack(player);
+            gethurt();
+        }
+        if (player.is_alive()) {
+            try {
+                world.lock.lock();
                 --cnt;
+                printcnt(13, maze.length + 1);
+                createitem(this.getX(), this.getY());
+            } finally {
+                world.lock.unlock();
             }
-        } finally {
-            lock.unlock();
         }
     }
 
@@ -93,29 +88,43 @@ public class Monster extends Creature implements Runnable {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            world.put(this, this.getX(), this.getY());
+            // world.put(this, this.getX(), this.getY());
         }
     }
 
+    public void createitem(int i, int j) {
+        int seed = rand.nextInt(10);
+        if (seed < 3) {
+            world.put(new Floor(world), this.getX(), this.getY());
+            maze[this.getX()][this.getY()] = 1;
+        } else if (seed < 6) {
+            world.put(new Thing(Color.ORANGE, (char) 3, world), i, j);
+            maze[i][j] = 5;
+        } else if (seed < 8) {
+            world.put(new Thing(Color.ORANGE, (char) 7, world), i, j);
+            maze[i][j] = 6;
+        } else if (seed < 10) {
+            world.put(new Thing(Color.ORANGE, (char) 43, world), i, j);
+            maze[i][j] = 7;
+        }
+        return;
+    }
+
+    public void printcnt(int x, int y) {
+        int num = maxcnt - cnt;
+        if (num > 9)
+            world.put(new Character(world, (char) (num / 10 + '0')), x, y);
+        else
+            world.put(new Character(world, ' '), x, y);
+        world.put(new Character(world, (char) (num % 10 + '0')), x + 1, y);
+    }
+
     public static void setcnt(int cnt) {
+        Monster.maxcnt = cnt;
         Monster.cnt = cnt;
     }
 
     public static boolean hasmonster() {
         return Monster.cnt > 0;
     }
-
-    // public void automove(World world) {
-    // ArrayList<Integer> moveplan = dfs.getPlan();
-    // if (moveplan.size() == 0) {
-    // dfs.set(this.getX(), this.getY());
-    // dfs.makePlan(player.getX(), player.getY());
-    // moveplan = dfs.getPlan();
-    // }
-    // if (moveplan.size() > 0) {
-    // move(world, moveplan.get(0));
-    // moveplan.remove(0);
-    // }
-    // }
-
 }

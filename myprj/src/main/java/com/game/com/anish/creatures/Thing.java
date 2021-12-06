@@ -20,7 +20,7 @@ public class Thing {
         this.tile = tile;
     }
 
-    Thing(Color color, char glyph, World world) {
+    Thing(Color color, char glyph, World world) {// 5加HP 6加炸弹 7加范围
         this.color = color;
         this.glyph = glyph;
         this.world = world;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import com.game.com.anish.creatures.Calabash;
 import com.game.com.anish.creatures.World;
 import com.game.com.anish.creatures.Wall;
@@ -22,7 +23,7 @@ public class WorldScreen implements Screen {
     World world;
     Calabash player;
     ExecutorService exec;
-    int[][] maze;// 0墙 1地板 2玩家 3炸弹 4爆炸
+    int[][] maze;// 0墙 1地板 2玩家 3炸弹 4爆炸 5加HP 6加炸弹 7加范围
     ArrayList<Node> playerlist;
     Random rand;
 
@@ -56,7 +57,7 @@ public class WorldScreen implements Screen {
             playerlist.add(new Node(x, y));
         }
         // for (int i = 0; i < temp.size(); ++i)
-        //     System.out.println(temp.get(i));
+        // System.out.println(temp.get(i));
     }
 
     private void init_world() {
@@ -64,6 +65,7 @@ public class WorldScreen implements Screen {
         mazeGenerator.addplayer(playerlist);
         mazeGenerator.generateMaze();
         maze = mazeGenerator.getMaze();
+        player = new Calabash(world, maze);
         // for (int i = 0; i < 30; ++i) {
         // for (int j = 0; j < 30; ++j)
         // maze[i][j] = 1;
@@ -82,20 +84,53 @@ public class WorldScreen implements Screen {
         world.put(new Character(world, 'H'), 0, dimension);
         world.put(new Character(world, 'P'), 1, dimension);
         world.put(new Character(world, ':'), 2, dimension);
-        world.put(new Character(world, '1'), 3, dimension);
-        world.put(new Character(world, '0'), 4, dimension);
-        world.put(new Character(world, '0'), 5, dimension);
+        player.printhp(3, dimension);
         world.put(new Character(world, '/'), 6, dimension);
-        world.put(new Character(world, '1'), 7, dimension);
-        world.put(new Character(world, '0'), 8, dimension);
-        world.put(new Character(world, '0'), 9, dimension);
-        for (int i = 10; i < dimension; ++i)
+        player.printhp(7, dimension);
+        world.put(new Character(world, ' '), 10, dimension);
+        world.put(new Character(world, ' '), 11, dimension);
+        world.put(new Character(world, 'B'), 12, dimension);
+        world.put(new Character(world, 'O'), 13, dimension);
+        world.put(new Character(world, 'M'), 14, dimension);
+        world.put(new Character(world, 'B'), 15, dimension);
+        world.put(new Character(world, ':'), 16, dimension);
+        player.printbomb(17, dimension);
+        world.put(new Character(world, ' '), 19, dimension);
+        world.put(new Character(world, ' '), 20, dimension);
+        world.put(new Character(world, 'R'), 21, dimension);
+        world.put(new Character(world, 'A'), 22, dimension);
+        world.put(new Character(world, 'D'), 23, dimension);
+        world.put(new Character(world, 'I'), 24, dimension);
+        world.put(new Character(world, 'U'), 25, dimension);
+        world.put(new Character(world, 'S'), 26, dimension);
+        world.put(new Character(world, ':'), 27, dimension);
+        player.printr(28, dimension);
+        for (int i = 30; i < dimension; ++i)
             world.put(new Character(world, ' '), i, dimension);
+        world.put(new Character(world, 'E'), 0, dimension + 1);
+        world.put(new Character(world, 'N'), 1, dimension + 1);
+        world.put(new Character(world, 'E'), 2, dimension + 1);
+        world.put(new Character(world, 'M'), 3, dimension + 1);
+        world.put(new Character(world, 'Y'), 4, dimension + 1);
+        world.put(new Character(world, ' '), 5, dimension + 1);
+        world.put(new Character(world, 'K'), 6, dimension + 1);
+        world.put(new Character(world, 'I'), 7, dimension + 1);
+        world.put(new Character(world, 'L'), 8, dimension + 1);
+        world.put(new Character(world, 'L'), 9, dimension + 1);
+        world.put(new Character(world, 'E'), 10, dimension + 1);
+        world.put(new Character(world, 'D'), 11, dimension + 1);
+        world.put(new Character(world, ':'), 12, dimension + 1);
+        world.put(new Character(world, ' '), 13, dimension + 1);
+        world.put(new Character(world, '0'), 14, dimension + 1);
+        world.put(new Character(world, '/'), 15, dimension + 1);
+        world.put(new Character(world, '8'), 16, dimension + 1);
+        world.put(new Character(world, ' '), 17, dimension + 1);
+        for (int i = 18; i < dimension; ++i)
+            world.put(new Character(world, ' '), i, dimension + 1);
     }
 
     private void init_creature() {
         // for (int i = 0; i < monster; ++i) {
-        player = new Calabash(world, maze);
         exec.execute(player);
         world.put(player, playerlist.get(0).x, playerlist.get(0).y);
         for (int i = 1; i < playerlist.size(); ++i) {
